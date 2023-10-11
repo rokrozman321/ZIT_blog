@@ -18,3 +18,8 @@ To je preprost projekt za upravljanje in objavljanje spletnega dnevnika ali blog
 ```bash
 git clone git@github.com:rokrozman321/ZIT_blog.git
 ```
+
+Run 
+```
+npm start
+```
