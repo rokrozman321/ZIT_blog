@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const userRouter = require('./user/routes')
+const postRouter = require('./post/routes')
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use('/user', userRouter);
+app.use('/post', postRouter);
 
 const atlas_geslo = process.env.ATLAS_GESLO
 const url = "mongodb+srv://Rok:"+ atlas_geslo +"@cluster0.vc1wigh.mongodb.net/Blog";
