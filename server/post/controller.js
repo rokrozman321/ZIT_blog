@@ -91,17 +91,6 @@ const deletePost = async (data) => {
 
 const likePost = async (data) => {
     try {
-        // const post = await Post.findById(data.id);
-        // if (!post) return null;
-        // post.likes += 1;
-        // await post.save();
-
-        // const user = await User.findById(data.authorId);
-        // if (!user) return null;
-        // user.fav_posts.push(post._id); // Adding post's ObjectId to the user's fav_posts array
-        // await user.save();
-
-        // return post
         const post = await Post.findById(data.id);
         if (!post) return null;
         
