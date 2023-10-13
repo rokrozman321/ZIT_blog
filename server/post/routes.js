@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const {getPosts, createPost, editPost} = require('../post/controller')
+const {getPosts, createPost, editPost, deletePost, likePost} = require('../post/controller')
 const {verifyToken} = require('../util/token')
 
 app.get('/status', (req, res) => {
@@ -49,6 +49,42 @@ app.put('/', async (req,res)=>{
         data.authorId = userId;
 
         const post = await editPost(data);
+        
+        if(post) res.status(201).json({ post: post });
+        else res.status(500).json({ error : 'Internal server error'})
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error : 'Internal server error'})
+    }
+})
+
+app.delete('/', async (req,res)=>{
+    try {
+        const data = req.body;
+        const token = req.header('Authorization');
+        const userId = await verifyToken(token);
+        data.authorId = userId;
+
+        const posts = await deletePost(data);
+        
+        if(posts) res.status(201).json({ posts: posts });
+        else res.status(500).json({ error : 'Internal server error'})
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error : 'Internal server error'})
+    }
+})
+
+app.put('/like', async (req,res)=>{
+    try {
+        const data = req.body;
+        const token = req.header('Authorization');
+        const userId = await verifyToken(token);
+        data.authorId = userId;
+
+        const post = await likePost(data);
         
         if(post) res.status(201).json({ post: post });
         else res.status(500).json({ error : 'Internal server error'})
