@@ -151,4 +151,28 @@ const likePost = async (data) => {
     }
 }
 
-module.exports = {getPosts, createPost, editPost, deletePost, likePost, getPost}
+const getFavoritePosts = async(data)=>{
+    try {
+        if (!data.userId) {
+            console.log('No user ID provided');
+            return null;
+        }
+
+    // const user = await User.findById(data.userId).populate('fav_posts');
+    const user = await User.findById(data.userId).populate({
+      path: 'fav_posts',
+      populate: { path: 'author', select: 'username' }
+    });
+    if (!user) {
+      console.log('User not found');
+      return null;
+    }
+    const favoritePosts = user.fav_posts;
+    return favoritePosts;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+module.exports = {getPosts, createPost, editPost, deletePost, likePost, getPost, getFavoritePosts}

@@ -6,7 +6,12 @@ import NavBar from './NavBar';
 
 const Home = ({setIsAuthenticated}) => {
     const [posts, setPosts] = useState([]);
+    const [allPosts, setAllPosts] = useState([]);
+    const [favoritePosts, setFavoritePosts] = useState([]);
+    const [filteredPosts, setFilteredPosts] = useState([])
     const token = localStorage.getItem('token');
+    const [filterText, setFilterText] = useState('');
+    const [showFavorites, setShowFavorites] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,6 +35,8 @@ const Home = ({setIsAuthenticated}) => {
                 }
             });
             setPosts(response.data.posts);
+            setAllPosts(response.data.posts)
+            console.log('all posts: ', posts)
             //setPosts(response.data.posts.map(post => post.posts).flat());
         } catch (error) {
             console.error('Error fetching posts: ', error);
@@ -72,10 +79,51 @@ const Home = ({setIsAuthenticated}) => {
     }
 };
 
+  useEffect(()=>{
+    console.log('sprememba pri filter ali favorites')
+    console.log('all posts: ', posts)
+    if(showFavorites){
+        console.log('show users favorites')
+        getFavoritePosts()
+    }
+    else{
+        setPosts(allPosts)
+    }
+  },[filterText, showFavorites])
+
+  const getFavoritePosts = async() =>{
+    try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:4000/post/favorite', {
+            headers: {
+                Authorization: `${token}`,
+            },
+        });
+        setPosts(response.data.posts)
+        setFavoritePosts(response.data.posts)
+    } catch (error) {
+        console.error('Error deleting post: ', error);
+    }
+  }
+
     return (
         <div>
             <NavBar setIsAuthenticated={setIsAuthenticated}/>
             <h2>Recent Posts</h2>
+            <div>
+                <input
+                    type="text"
+                    placeholder="Search posts"
+                    value={filterText}
+                    onChange={(e) => setFilterText(e.target.value)}
+                />
+                <input
+                    type="checkbox"
+                    checked={showFavorites}
+                    onChange={() => setShowFavorites(!showFavorites)}
+                />
+                <label>Show Favorites</label>
+            </div>
             <NewPostForm setPosts={setPosts}/>
             {posts.length > 0 ? (
                 <ul>
