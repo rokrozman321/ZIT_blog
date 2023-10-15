@@ -38,7 +38,9 @@ const createComment = async (data) => {
         post.comments.push(newComment._id);
         await post.save();
 
-        return newComment;   
+        // return newComment;
+        const populatedComment = await newComment.populate('author')
+        return populatedComment;   
     } catch (error) {
         console.log(error);
         return null;

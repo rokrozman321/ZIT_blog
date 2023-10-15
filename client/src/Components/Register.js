@@ -37,7 +37,7 @@ const Register = ({setIsAuthenticated}) => {
 
             const { token } = response.data;
             console.log('token', token);
-            sessionStorage.setItem('token', token); // Save the token to session storage
+            localStorage.setItem('token', token); // Save the token to session storage
             setIsAuthenticated(true);
 
             // Redirect the user to the login page or another route

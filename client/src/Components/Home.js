@@ -54,6 +54,23 @@ const Home = () => {
         }
     };
 
+    const handleDeletePost = async (postId, setPosts) => {
+    try {
+        const token = localStorage.getItem('token');
+        await axios.delete('http://localhost:4000/post', {
+            headers: {
+                Authorization: `${token}`,
+            },
+            data: {
+                id: postId,
+            },
+        });
+        fetchPosts();
+    } catch (error) {
+        console.error('Error deleting post: ', error);
+    }
+};
+
     return (
         <div>
             <h2>Recent Posts</h2>
@@ -69,6 +86,7 @@ const Home = () => {
                             <p>Author: {post.author.username}</p>
                             <p>Likes: {post.likes}</p>
                             <button onClick={() => handleLikePost(post._id)}>Like</button>
+                            <button onClick={() => handleDeletePost(post._id, setPosts)}>Delete</button>
                             <p>Comments: {post.comments.length}</p>
                             <hr />
                         </li>
