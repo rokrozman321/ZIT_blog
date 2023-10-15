@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import NewPostForm from './NewPostForm';
+import NavBar from './NavBar';
 
-const Home = () => {
+const Home = ({setIsAuthenticated}) => {
     const [posts, setPosts] = useState([]);
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
@@ -73,6 +74,7 @@ const Home = () => {
 
     return (
         <div>
+            <NavBar setIsAuthenticated={setIsAuthenticated}/>
             <h2>Recent Posts</h2>
             <NewPostForm setPosts={setPosts}/>
             {posts.length > 0 ? (

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import NewCommentForm from './NewCommentForm';
+import NavBar from './NavBar';
 
 const PostDetail = () => {
     const { postId } = useParams();
@@ -87,6 +88,7 @@ const PostDetail = () => {
 
     return (
                 <div>
+                    <NavBar />
             {post ? (
                 <div>
                     <h2>{post.title}</h2>

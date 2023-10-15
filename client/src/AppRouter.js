@@ -23,7 +23,7 @@ const AppRouter = () => {
                 )}
                 {isAuthenticated && (
                     <>
-                        <Route exact path='*' element={<Home />} />
+                        <Route exact path='*' element={<Home setIsAuthenticated={setIsAuthenticated} />} />
                         <Route path='/post/:postId' element={<PostDetail />} />
                     </>
                 )}
