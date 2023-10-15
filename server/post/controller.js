@@ -72,7 +72,9 @@ const createPost = async(data) =>{
         user.posts.push(newPost);
         await user.save();
 
-        return newPost
+        // return newPost
+        const populatedNewPost = await newPost.populate('author');
+        return populatedNewPost;
     } catch (error) {
         console.log(error);
         return null;
