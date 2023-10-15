@@ -22,6 +22,28 @@ const getPosts = async(data) => {
     }
 }
 
+const getPost = async(data) => {
+    try {
+        if (!data.userId) {
+            console.log('No user ID provided');
+            return null;
+        }
+        if (!data.postId) {
+            console.log('No post ID provided');
+            return null;
+        }
+
+        const user = await User.findById(data.userId);
+        if (!user) return null;
+
+        const post = await Post.findById(data.postId);
+        return post;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
 const createPost = async(data) =>{
     try {
         const user = await User.findById(data.id);
@@ -119,4 +141,4 @@ const likePost = async (data) => {
     }
 }
 
-module.exports = {getPosts, createPost, editPost, deletePost, likePost}
+module.exports = {getPosts, createPost, editPost, deletePost, likePost, getPost}

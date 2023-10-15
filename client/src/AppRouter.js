@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Login from './Components/Login';
 import Register from './Components/Register';
 import Home from './Components/Home';
+import PostDetail from './Components/PostDetail';
 
 const AppRouter = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,11 +18,13 @@ const AppRouter = () => {
                             element={<Login setIsAuthenticated={setIsAuthenticated} />}
                         />
                         <Route path="/register" element={<Register setIsAuthenticated={setIsAuthenticated}/>} />
+                        <Route path='*' element={<Navigate to='/login' replace />} />
                     </>
                 )}
                 {isAuthenticated && (
                     <>
-                    <Route path='/' element={ <Home />} />
+                        <Route exact path='*' element={<Home />} />
+                        <Route path='/post/:postId' element={<PostDetail />} />
                     </>
                 )}
 

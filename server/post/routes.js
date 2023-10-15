@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const {getPosts, createPost, editPost, deletePost, likePost} = require('../post/controller')
+const {getPosts, createPost, editPost, deletePost, likePost, getPost} = require('../post/controller')
 const {verifyToken} = require('../util/token')
 
 app.get('/status', (req, res) => {
@@ -20,6 +20,24 @@ app.get('/', async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'Internal server error'});
+    }
+});
+
+app.get('/:postId', async (req, res) => {
+    try {
+        const token = req.header('Authorization');
+        const data = {};
+        const userId = await verifyToken(token);
+        data.userId = userId;
+        data.postId = req.params.postId;
+        const post = await getPost(data);
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+        res.status(200).json({ post });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
