@@ -45,8 +45,9 @@ const Home = () => {
                                 <h3>{post.title}</h3>
                             </Link>
                             <p>{post.body}</p>
-                            <p>Author: {post.author}</p>
+                            <p>Author: {post.author.username}</p>
                             <p>Likes: {post.likes}</p>
+                            <p>Comments: {post.comments.length}</p>
                             <hr />
                         </li>
                     ))}

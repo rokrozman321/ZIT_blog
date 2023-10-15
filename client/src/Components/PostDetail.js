@@ -17,6 +17,7 @@ const PostDetail = () => {
                     }
                 });
                 setPost(response.data.post);
+                console.log('post: ', response.data.post)
             } catch (error) {
                 console.error('Error fetching post: ', error);
             }
@@ -31,13 +32,13 @@ const PostDetail = () => {
                 <div>
                     <h2>{post.title}</h2>
                     <p>{post.body}</p>
-                    <p>Author: {post.author}</p>
+                    <p>Author: {post.author.username}</p>
                     <p>Likes: {post.likes}</p>
                     <hr />
                     <p>Comments:</p>
                     {post.comments.map(comment => (
                         <div key={comment._id}>
-                            <p>Author: {comment.author}</p>
+                            <p>Author: {comment.author.username}</p>
                             <p>{comment.comment}</p>
                             <p>Likes: {comment.likes}</p>
                             <hr />

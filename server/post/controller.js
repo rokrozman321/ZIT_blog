@@ -10,10 +10,10 @@ const getPosts = async(data) => {
         }
 
         console.log('id v get posts: ', data.id);
-        const user = await User.findById(data.id);
+        const user = await User.findById(data.id)
         if (!user) return null;
 
-        const posts = await Post.find();
+        const posts = await Post.find().populate('author');
         console.log('posts', posts)
         return posts;
     } catch (error) {
@@ -36,7 +36,15 @@ const getPost = async(data) => {
         const user = await User.findById(data.userId);
         if (!user) return null;
 
-        const post = await Post.findById(data.postId);
+        const post = await Post.findById(data.postId).populate({
+                path: 'comments',
+                populate: {
+                    path: 'author',
+                    model: 'User',
+                    select: 'username',
+                },
+            })
+            .populate('author', 'username');;
         return post;
     } catch (error) {
         console.log(error);
