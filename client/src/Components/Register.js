@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const Register = ({setIsAuthenticated}) => {
+const Register = ({ setIsAuthenticated }) => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -36,18 +36,16 @@ const Register = ({setIsAuthenticated}) => {
             });
 
             const { token } = response.data;
-            console.log('token', token);
             localStorage.setItem('token', token); // Save the token to session storage
             setIsAuthenticated(true);
 
-            // Redirect the user to the login page or another route
             navigate('/');
         } catch (error) {
             console.error('Error during registration: ', error);
         }
     };
 
-  return (
+    return (
         <div>
             <h2>Register</h2>
             {error && <p className="error">{error}</p>}
@@ -69,7 +67,7 @@ const Register = ({setIsAuthenticated}) => {
                 Already have an account? <Link to="/login">Login</Link>
             </p>
         </div>
-  )
+    )
 }
 
 export default Register

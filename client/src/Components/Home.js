@@ -1,45 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-import NewPostForm from './NewPostForm';
-import NavBar from './NavBar';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import NewPostForm from "./NewPostForm";
+import NavBar from "./NavBar";
 
-const Home = ({setIsAuthenticated}) => {
+const Home = ({ setIsAuthenticated }) => {
     const [posts, setPosts] = useState([]);
     const [allPosts, setAllPosts] = useState([]);
     const [favoritePosts, setFavoritePosts] = useState([]);
-    const [filteredPosts, setFilteredPosts] = useState([])
-    const token = localStorage.getItem('token');
-    const [searchText, setSearchText] = useState('');
+    const [filteredPosts, setFilteredPosts] = useState([]);
+    const token = localStorage.getItem("token");
+    const [searchText, setSearchText] = useState("");
     const [showFavorites, setShowFavorites] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log('useEffect')
         if (!token) {
-            console.log('no token')
-            navigate('/login');
+            console.log("no token");
+            navigate("/login");
         } else {
-                console.log('tuaj')
             fetchPosts();
         }
     }, [token, navigate]);
 
     const fetchPosts = async () => {
         try {
-            console.log('fetch posts')
-            const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:4000/post', {
+            const token = localStorage.getItem("token");
+            const response = await axios.get("http://localhost:4000/post", {
                 headers: {
-                    Authorization: `${token}`
-                }
+                    Authorization: `${token}`,
+                },
             });
             setPosts(response.data.posts);
-            setAllPosts(response.data.posts)
-            console.log('all posts: ', posts)
-            //setPosts(response.data.posts.map(post => post.posts).flat());
+            setAllPosts(response.data.posts);
         } catch (error) {
-            console.error('Error fetching posts: ', error);
+            console.error("Error fetching posts: ", error);
         }
     };
 
@@ -54,86 +49,69 @@ const Home = ({setIsAuthenticated}) => {
                     },
                 }
             );
-            console.log(response.data);
-            // Call fetchPosts again to update the posts
             fetchPosts();
         } catch (error) {
-            console.error('Error liking post: ', error);
+            console.error("Error liking post: ", error);
         }
     };
 
     const handleDeletePost = async (postId, setPosts) => {
-    try {
-        const token = localStorage.getItem('token');
-        await axios.delete('http://localhost:4000/post', {
-            headers: {
-                Authorization: `${token}`,
-            },
-            data: {
-                id: postId,
-            },
+        try {
+            const token = localStorage.getItem("token");
+            await axios.delete("http://localhost:4000/post", {
+                headers: {
+                    Authorization: `${token}`,
+                },
+                data: {
+                    id: postId,
+                },
+            });
+            fetchPosts();
+        } catch (error) {
+            console.error("Error deleting post: ", error);
+        }
+    };
+
+    useEffect(() => {
+        const fPosts = posts.filter((post) => {
+            const postText =
+                `${post.title} ${post.body} ${post.author.username}`.toLowerCase();
+            return postText.includes(searchText.toLowerCase());
         });
-        fetchPosts();
-    } catch (error) {
-        console.error('Error deleting post: ', error);
-    }
-};
+        console.log(filteredPosts);
+        setFilteredPosts(fPosts);
+        setPosts(fPosts);
+        if (!searchText) {
+            setPosts(allPosts);
+        }
+    }, [searchText]);
 
-const filterPostsByText = (posts, searchText) => {
-  if (!searchText) {
-    return posts;
-  }
-  const filteredPosts = posts.filter(post => {
-    const postText = `${post.title} ${post.body} ${post.author.username}`.toLowerCase();
-    return postText.includes(searchText.toLowerCase());
-  });
-  return filteredPosts;
-};
+    useEffect(() => {
+        if (showFavorites) {
+            getFavoritePosts();
+        } else {
+            setPosts(allPosts);
+        }
+    }, [showFavorites]);
 
-  useEffect(()=>{
-    console.log(searchText)
-    //setFilteredPosts(filterPostsByText(posts, searchText))
-    const fPosts = posts.filter(post => {
-    const postText = `${post.title} ${post.body} ${post.author.username}`.toLowerCase();
-    return postText.includes(searchText.toLowerCase());
-  });
-  console.log(filteredPosts)
-  setFilteredPosts(fPosts)
-  setPosts(fPosts)
-  if(!searchText){
-    console.log('no text')
-    setPosts(allPosts)
-  }
-  },[searchText])
-
-  useEffect(()=>{
-    if(showFavorites){
-        console.log('show users favorites')
-        getFavoritePosts()
-    }
-    else{
-        setPosts(allPosts)
-    }
-  },[showFavorites])
-
-  const getFavoritePosts = async() =>{
-    try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:4000/post/favorite', {
-            headers: {
-                Authorization: `${token}`,
-            },
-        });
-        setPosts(response.data.posts)
-        setFavoritePosts(response.data.posts)
-    } catch (error) {
-        console.error('Error deleting post: ', error);
-    }
-  }
+    const getFavoritePosts = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.get("http://localhost:4000/post/favorite", {
+                headers: {
+                    Authorization: `${token}`,
+                },
+            });
+            setPosts(response.data.posts);
+            setFavoritePosts(response.data.posts);
+        } catch (error) {
+            console.error("Error deleting post: ", error);
+        }
+    };
 
     return (
         <div>
-            <NavBar setIsAuthenticated={setIsAuthenticated}/>
+            <NavBar setIsAuthenticated={setIsAuthenticated} />
             <h2>Recent Posts</h2>
             <div>
                 <input
@@ -149,10 +127,10 @@ const filterPostsByText = (posts, searchText) => {
                 />
                 <label>Show Favorites</label>
             </div>
-            <NewPostForm setPosts={setPosts}/>
+            <NewPostForm setPosts={setPosts} />
             {posts.length > 0 ? (
                 <ul>
-                    {posts.map(post => (
+                    {posts.map((post) => (
                         <li key={post._id}>
                             <Link to={`/post/${post._id}`}>
                                 <h3>{post.title}</h3>
@@ -161,7 +139,9 @@ const filterPostsByText = (posts, searchText) => {
                             <p>Author: {post.author.username}</p>
                             <p>Likes: {post.likes}</p>
                             <button onClick={() => handleLikePost(post._id)}>Like</button>
-                            <button onClick={() => handleDeletePost(post._id, setPosts)}>Delete</button>
+                            <button onClick={() => handleDeletePost(post._id, setPosts)}>
+                                Delete
+                            </button>
                             <p>Comments: {post.comments.length}</p>
                             <hr />
                         </li>

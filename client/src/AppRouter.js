@@ -17,7 +17,7 @@ const AppRouter = () => {
                             path="/login"
                             element={<Login setIsAuthenticated={setIsAuthenticated} />}
                         />
-                        <Route path="/register" element={<Register setIsAuthenticated={setIsAuthenticated}/>} />
+                        <Route path="/register" element={<Register setIsAuthenticated={setIsAuthenticated} />} />
                         <Route path='*' element={<Navigate to='/login' replace />} />
                     </>
                 )}

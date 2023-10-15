@@ -2,7 +2,7 @@ const User = require('../models/Users');
 const Post = require('../models/Posts');
 const Comment = require('../models/Comments');
 const bcrypt = require('bcrypt');
-const {createToken, verifyToken} = require('../util/token')
+const { createToken, verifyToken } = require('../util/token')
 
 const getAllCommentsForPost = async (data) => {
     try {
@@ -22,13 +22,10 @@ const createComment = async (data) => {
 
         const post = await Post.findById(postId);
         if (!post) return null;
-        console.log(post)
 
         const user = await User.findById(data.userId);
-        if (!user) {console.log('no user'); return null;}
-        console.log(user)
+        if (!user) { console.log('no user'); return null; }
 
-        console.log('data v create', data)
         const newComment = await Comment.create({
             post: post._id,
             author: user._id,
@@ -40,7 +37,7 @@ const createComment = async (data) => {
 
         // return newComment;
         const populatedComment = await newComment.populate('author')
-        return populatedComment;   
+        return populatedComment;
     } catch (error) {
         console.log(error);
         return null;
@@ -86,11 +83,9 @@ const likeComment = async (data) => {
         const likedIndex = user.fav_comments.indexOf(comment._id);
 
         if (likedIndex === -1) {
-            // If the comment is not in the user's fav_comments, like the comment and add it to fav_comments
             comment.likes += 1;
             user.fav_comments.push(comment._id);
         } else {
-            // If the comment is already liked, unlike the comment and remove it from fav_comments
             comment.likes -= 1;
             user.fav_comments.splice(likedIndex, 1);
         }
@@ -106,4 +101,4 @@ const likeComment = async (data) => {
 };
 
 
-module.exports = {getAllCommentsForPost, createComment, deleteComment, likeComment}
+module.exports = { getAllCommentsForPost, createComment, deleteComment, likeComment }

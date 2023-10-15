@@ -21,16 +21,16 @@ app.use('/post', postRouter);
 app.use('/comment', commentRouter);
 
 const atlas_geslo = process.env.ATLAS_GESLO
-const url = "mongodb+srv://Rok:"+ atlas_geslo +"@cluster0.vc1wigh.mongodb.net/Blog";
+const url = "mongodb+srv://Rok:" + atlas_geslo + "@cluster0.vc1wigh.mongodb.net/Blog";
 
-mongoose.connect(url, { 
-        useNewUrlParser: true, 
-        useUnifiedTopology: true
-    }).then(()=>{
-        console.log("Database connected");
-    }).catch((err)=>{
-        console.log(err);
-    });
+mongoose.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log("Database connected");
+}).catch((err) => {
+    console.log(err);
+});
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Server is up and running' });

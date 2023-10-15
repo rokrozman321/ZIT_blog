@@ -12,9 +12,6 @@ const NewCommentForm = ({ postId, setComments }) => {
         event.preventDefault();
         try {
             const token = localStorage.getItem('token');
-            console.log('postId', postId)
-            console.log('comment: ', comment)
-            console.log('token: ', token)
             const response = await axios.post(
                 'http://localhost:4000/comment',
                 { postId: postId, comment: comment },
@@ -24,8 +21,6 @@ const NewCommentForm = ({ postId, setComments }) => {
                     },
                 }
             );
-            //console.log(response.data);
-            console.log("response: ", response.data.comment)
             setComment('');
             setComments((comments) => [...comments, response.data.comment]);
         } catch (error) {

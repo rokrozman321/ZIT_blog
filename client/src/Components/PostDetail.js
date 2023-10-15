@@ -7,7 +7,6 @@ import NavBar from './NavBar';
 const PostDetail = () => {
     const { postId } = useParams();
     const [comments, setComments] = useState('');
-    console.log('postId:', postId);
     const [post, setPost] = useState(null);
     const token = localStorage.getItem('token');
     const [editedPost, setEditedPost] = useState({ title: '', body: '' });
@@ -26,36 +25,30 @@ const PostDetail = () => {
             });
             setPost(response.data.post);
             setComments(response.data.post.comments)
-            console.log('comments: ', comments)
-            console.log('post: ', response.data.post)
         } catch (error) {
             console.error('Error fetching post: ', error);
         }
     };
 
     const handleLikeComment = async (commentId) => {
-    try {
-        const response = await axios.put(
-            `http://localhost:4000/comment/like`,
-            { id: commentId },
-            {
-                headers: {
-                    Authorization: `${token}`,
-                },
-            }
-        );
-        console.log(response.data.comment);
-        // Call fetchPosts again to update the posts
-        fetchPost();
-    } catch (error) {
-        console.error('Error liking post: ', error);
-    }
+        try {
+            const response = await axios.put(
+                `http://localhost:4000/comment/like`,
+                { id: commentId },
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                }
+            );
+            fetchPost();
+        } catch (error) {
+            console.error('Error liking post: ', error);
+        }
     };
 
     const handleEditPost = async () => {
         try {
-            console.log('title', editedPost.title)
-            console.log('id: ', postId)
             await axios.put(`http://localhost:4000/post`, {
                 id: postId,
                 title: editedPost.title,
@@ -87,8 +80,8 @@ const PostDetail = () => {
     };
 
     return (
-                <div>
-                    <NavBar />
+        <div>
+            <NavBar />
             {post ? (
                 <div>
                     <h2>{post.title}</h2>

@@ -1,11 +1,10 @@
 const User = require('../models/Users');
 const bcrypt = require('bcrypt');
-const {createToken, verifyToken} = require('../util/token')
+const { createToken, verifyToken } = require('../util/token')
 
-const getUsers = async() => {
+const getUsers = async () => {
     try {
         const users = await User.find();
-        console.log('users', users)
         return users;
     } catch (error) {
         console.log(error);
@@ -16,7 +15,7 @@ const getUsers = async() => {
 //TODO 
 // check if username already exists 
 
-const createNewUser = async (data) =>{
+const createNewUser = async (data) => {
     try {
         const existingUser = await User.findOne({ username: data.username });
         if (existingUser) {
@@ -42,16 +41,16 @@ const createNewUser = async (data) =>{
 }
 const loginUser = async (data) => {
     try {
-        if(!data.username || !data.password){
+        if (!data.username || !data.password) {
             console.log('Did not got username or password');
             return null
         }
-        
+
         const user = await User.findOne({
             username: data.username,
         });
 
-        if(!user){
+        if (!user) {
             console.log('user does not exists');
             return null
         }
@@ -66,7 +65,7 @@ const loginUser = async (data) => {
         const token = await createToken(user);
         // const token = 'Fake token from login'
         // const id = await verifyToken(token);
-        
+
         return token;
 
     } catch (error) {
@@ -118,4 +117,4 @@ const updatePassword = async (data) => {
     }
 }
 
-module.exports = {createNewUser, getUsers, loginUser, updatePassword};
+module.exports = { createNewUser, getUsers, loginUser, updatePassword };

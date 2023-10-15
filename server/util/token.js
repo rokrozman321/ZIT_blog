@@ -13,7 +13,7 @@ const createToken = async (user) => {
 const verifyToken = async (token) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decoded.userId; 
+        const userId = decoded.userId;
         return userId;
     } catch (error) {
         console.error('Error verifying token:', error);
@@ -21,4 +21,4 @@ const verifyToken = async (token) => {
     }
 }
 
-module.exports = {createToken, verifyToken};
+module.exports = { createToken, verifyToken };

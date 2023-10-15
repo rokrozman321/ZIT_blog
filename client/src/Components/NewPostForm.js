@@ -22,14 +22,11 @@ const NewPostForm = ({ setPosts }) => {
             );
             setPosts(prevPosts => [...prevPosts, response.data.post]);
 
-            // Reset the form fields after successfully creating the post
             setTitle('');
             setBody('');
         } catch (error) {
             console.error('Error creating post: ', error);
         }
-
-        // You can add logic here to handle any redirection or state updates after the post is created
     };
 
     return (
