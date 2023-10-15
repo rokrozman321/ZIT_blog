@@ -10,7 +10,7 @@ const Home = ({setIsAuthenticated}) => {
     const [favoritePosts, setFavoritePosts] = useState([]);
     const [filteredPosts, setFilteredPosts] = useState([])
     const token = localStorage.getItem('token');
-    const [filterText, setFilterText] = useState('');
+    const [searchText, setSearchText] = useState('');
     const [showFavorites, setShowFavorites] = useState(false);
     const navigate = useNavigate();
 
@@ -79,9 +79,34 @@ const Home = ({setIsAuthenticated}) => {
     }
 };
 
+const filterPostsByText = (posts, searchText) => {
+  if (!searchText) {
+    return posts;
+  }
+  const filteredPosts = posts.filter(post => {
+    const postText = `${post.title} ${post.body} ${post.author.username}`.toLowerCase();
+    return postText.includes(searchText.toLowerCase());
+  });
+  return filteredPosts;
+};
+
   useEffect(()=>{
-    console.log('sprememba pri filter ali favorites')
-    console.log('all posts: ', posts)
+    console.log(searchText)
+    //setFilteredPosts(filterPostsByText(posts, searchText))
+    const fPosts = posts.filter(post => {
+    const postText = `${post.title} ${post.body} ${post.author.username}`.toLowerCase();
+    return postText.includes(searchText.toLowerCase());
+  });
+  console.log(filteredPosts)
+  setFilteredPosts(fPosts)
+  setPosts(fPosts)
+  if(!searchText){
+    console.log('no text')
+    setPosts(allPosts)
+  }
+  },[searchText])
+
+  useEffect(()=>{
     if(showFavorites){
         console.log('show users favorites')
         getFavoritePosts()
@@ -89,7 +114,7 @@ const Home = ({setIsAuthenticated}) => {
     else{
         setPosts(allPosts)
     }
-  },[filterText, showFavorites])
+  },[showFavorites])
 
   const getFavoritePosts = async() =>{
     try {
@@ -114,8 +139,8 @@ const Home = ({setIsAuthenticated}) => {
                 <input
                     type="text"
                     placeholder="Search posts"
-                    value={filterText}
-                    onChange={(e) => setFilterText(e.target.value)}
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
                 />
                 <input
                     type="checkbox"
