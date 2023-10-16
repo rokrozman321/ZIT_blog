@@ -18,6 +18,11 @@ const Register = ({ setIsAuthenticated }) => {
 
     const handleRegister = async () => {
         try {
+        //     const existingUser = await User.findOne({ username: data.username });
+        // if (existingUser) {
+        //         setError('User already exists');
+        //     return  
+        // }
             if (!username || !password) {
                 setError('All fields are required.');
                 return;
@@ -35,8 +40,13 @@ const Register = ({ setIsAuthenticated }) => {
                 password,
             });
 
+            if (response.data.token.error) {
+            setError(response.data.token.error);
+            return;
+        }
+
             const { token } = response.data;
-            localStorage.setItem('token', token); // Save the token to session storage
+            localStorage.setItem('token', token); 
             setIsAuthenticated(true);
 
             navigate('/');

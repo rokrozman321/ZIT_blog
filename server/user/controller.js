@@ -19,7 +19,8 @@ const createNewUser = async (data) => {
     try {
         const existingUser = await User.findOne({ username: data.username });
         if (existingUser) {
-            return null;
+            return { error: 'Username is already taken' };
+            // return null;
         }
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(data.password, saltRounds);
@@ -36,7 +37,8 @@ const createNewUser = async (data) => {
         return token
     } catch (error) {
         console.log(error);
-        return null;
+        // return null;
+        return { error: 'Internal server error' };
     }
 }
 const loginUser = async (data) => {
