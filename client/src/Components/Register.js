@@ -47,6 +47,7 @@ const Register = ({ setIsAuthenticated }) => {
             navigate('/');
         } catch (error) {
             console.error('Error during registration: ', error);
+            setError('Error during registration');
         }
     };
 

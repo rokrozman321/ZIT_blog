@@ -6,7 +6,7 @@ const getPosts = async (data) => {
     try {
         if (!data.id) {
             console.log('No user ID provided');
-            return null;
+            return { error: 'No user provided' };
         }
 
         const user = await User.findById(data.id)
@@ -16,7 +16,7 @@ const getPosts = async (data) => {
         return posts;
     } catch (error) {
         console.log(error);
-        return null;
+        return { error: 'Internal server error' };
     }
 }
 
@@ -24,16 +24,20 @@ const getPost = async (data) => {
     try {
         if (!data.userId) {
             console.log('No user ID provided');
+            return { error: 'No user provided' };
             return null;
         }
         if (!data.postId) {
             console.log('No post ID provided');
+            return { error: 'No post provided' };
             return null;
         }
 
         const user = await User.findById(data.userId);
-        if (!user) return null;
+        if (!user) {
 
+            return { error: 'User not found' };
+        }
         const post = await Post.findById(data.postId).populate({
             path: 'comments',
             populate: {
@@ -46,19 +50,21 @@ const getPost = async (data) => {
         return post;
     } catch (error) {
         console.log(error);
-        return null;
+            return { error: 'Error getting post info' };
     }
 }
 
 const createPost = async (data) => {
     try {
         const user = await User.findById(data.id);
-        if (!user) return null;
+        if (!user){
+            return { error: 'User not found' };
+        } 
         const author = user.id;
         const title = data.title;
         const body = data.body;
         if (!title || !body) {
-            return null
+            return { error: 'Title or body not provided' };
         }
 
         const newPost = await Post.create({
@@ -75,22 +81,26 @@ const createPost = async (data) => {
         return populatedNewPost;
     } catch (error) {
         console.log(error);
-        return null;
+            return { error: 'Error creating new post' };
     }
 }
 
 const editPost = async (data) => {
     try {
         const post = await Post.findById(data.id);
-        if (!post) return null;
-        if (post.author != data.authorId) return null;
+        if (!post) {
+            return { error: 'Post not provided' };
+        }
+        if (post.author != data.authorId) {
+            return { error: 'You are not author of post' };
+        }
         if (data.title) post.title = data.title;
         if (data.body) post.body = data.body;
         await post.save();
         return post;
     } catch (error) {
         console.log(error);
-        return null;
+            return { error: 'Error editing post' };
     }
 }
 
@@ -99,12 +109,12 @@ const deletePost = async (data) => {
         const post = await Post.findById(data.id);
         if (!post) {
             console.log('Post not found');
-            return null;
+            return { error: 'Post not found' };
         }
 
         if (post.author.toString() !== data.authorId) {
             console.log('Not the author of the post');
-            return null;
+            return { error: 'You are not author of the post' };
         }
 
         await Post.deleteOne({ _id: data.id });
@@ -112,17 +122,21 @@ const deletePost = async (data) => {
         return posts;
     } catch (error) {
         console.log(error);
-        return null;
+            return { error: 'Error deleting post' };
     }
 }
 
 const likePost = async (data) => {
     try {
         const post = await Post.findById(data.id);
-        if (!post) return null;
+        if (!post) {
+            return { error: 'Post not found' };
+        }
 
         const user = await User.findById(data.authorId);
-        if (!user) return null;
+        if (!user) {
+            return { error: 'User not found' };
+        }
 
         const likedIndex = user.fav_posts.indexOf(post._id);
 
@@ -140,7 +154,7 @@ const likePost = async (data) => {
         return post;
     } catch (error) {
         console.log(error);
-        return null;
+            return { error: 'Error liking post' };
     }
 }
 
@@ -148,7 +162,7 @@ const getFavoritePosts = async (data) => {
     try {
         if (!data.userId) {
             console.log('No user ID provided');
-            return null;
+            return { error: 'User not found' };
         }
 
         const user = await User.findById(data.userId).populate({
@@ -157,13 +171,13 @@ const getFavoritePosts = async (data) => {
         });
         if (!user) {
             console.log('User not found');
-            return null;
+            return { error: 'User not found' };
         }
         const favoritePosts = user.fav_posts;
         return favoritePosts;
     } catch (error) {
         console.log(error);
-        return null;
+            return { error: 'Error getting favorite posts' };
     }
 }
 

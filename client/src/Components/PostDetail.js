@@ -11,6 +11,7 @@ const PostDetail = () => {
     const token = localStorage.getItem('token');
     const [editedPost, setEditedPost] = useState({ title: '', body: '' });
     const [isEditing, setIsEditing] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         fetchPost();
@@ -23,10 +24,17 @@ const PostDetail = () => {
                     Authorization: `${token}`
                 }
             });
+
+            if (response.data.post.error) {
+                setError(response.data.post.error);
+                return;
+            }
+            
             setPost(response.data.post);
             setComments(response.data.post.comments)
         } catch (error) {
             console.error('Error fetching post: ', error);
+                setError('Error fetching post');
         }
     };
 
@@ -41,6 +49,11 @@ const PostDetail = () => {
                     },
                 }
             );
+            
+            if (response.data.comment.error) {
+                setError(response.data.comment.error);
+                return;
+            }
             fetchPost();
         } catch (error) {
             console.error('Error liking post: ', error);
@@ -49,7 +62,7 @@ const PostDetail = () => {
 
     const handleEditPost = async () => {
         try {
-            await axios.put(`http://localhost:4000/post`, {
+            const response = await axios.put(`http://localhost:4000/post`, {
                 id: postId,
                 title: editedPost.title,
                 body: editedPost.body
@@ -58,6 +71,10 @@ const PostDetail = () => {
                     Authorization: `${token}`
                 }
             });
+            if (response.data.post.error) {
+                setError(response.data.post.error);
+                return;
+            }
             fetchPost();
             setIsEditing(false);
         } catch (error) {
@@ -67,12 +84,16 @@ const PostDetail = () => {
 
     const handleDeleteComment = async (commentId) => {
         try {
-            await axios.delete(`http://localhost:4000/comment`, {
+            const response = await axios.delete(`http://localhost:4000/comment`, {
                 data: { commentId, postId },
                 headers: {
                     Authorization: `${token}`
                 }
             });
+            if (response.data.comments.error) {
+                setError(response.data.comments.error);
+                return;
+            }
             fetchPost(); // Refresh the post data after deleting a comment
         } catch (error) {
             console.error('Error deleting comment: ', error);
@@ -84,6 +105,7 @@ const PostDetail = () => {
             <NavBar />
             {post ? (
                 <div>
+            {error && <p className="error">{error}</p>}
                     <h2>{post.title}</h2>
                     <p>{post.body}</p>
                     <p>Author: {post.author.username}</p>

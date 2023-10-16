@@ -4,6 +4,7 @@ import axios from 'axios';
 const NewPostForm = ({ setPosts }) => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,6 +21,12 @@ const NewPostForm = ({ setPosts }) => {
                     },
                 }
             );
+
+            if (response.data.post.error) {
+                setError(response.data.post.error);
+                return;
+            }
+
             setPosts(prevPosts => [...prevPosts, response.data.post]);
 
             setTitle('');
@@ -32,6 +39,7 @@ const NewPostForm = ({ setPosts }) => {
     return (
         <form onSubmit={handleSubmit}>
             <div>
+            {error && <p className="error">{error}</p>}
                 <label>Title</label>
                 <input
                     type="text"

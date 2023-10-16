@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const NewCommentForm = ({ postId, setComments }) => {
     const [comment, setComment] = useState('');
+    const [error, setError] = useState('');
 
     const handleCommentChange = (event) => {
         setComment(event.target.value);
@@ -21,6 +22,10 @@ const NewCommentForm = ({ postId, setComments }) => {
                     },
                 }
             );
+            if (response.data.comment.error) {
+                setError(response.data.comment.error);
+                return;
+            }
             setComment('');
             setComments((comments) => [...comments, response.data.comment]);
         } catch (error) {
@@ -30,6 +35,7 @@ const NewCommentForm = ({ postId, setComments }) => {
 
     return (
         <form onSubmit={handleCommentSubmit}>
+            {error && <p className="error">{error}</p>}
             <label>
                 New Comment:
                 <input type="text" value={comment} onChange={handleCommentChange} />

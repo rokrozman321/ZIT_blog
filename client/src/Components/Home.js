@@ -13,6 +13,7 @@ const Home = ({ setIsAuthenticated }) => {
     const [searchText, setSearchText] = useState("");
     const [showFavorites, setShowFavorites] = useState(false);
     const navigate = useNavigate();
+    const [error, setError] = useState('');
 
     useEffect(() => {
         if (!token) {
@@ -31,10 +32,17 @@ const Home = ({ setIsAuthenticated }) => {
                     Authorization: `${token}`,
                 },
             });
+
+            if (response.data.posts.error) {
+                setError(response.data.posts.error);
+                return;
+            }
+
             setPosts(response.data.posts);
             setAllPosts(response.data.posts);
         } catch (error) {
             console.error("Error fetching posts: ", error);
+                setError('Error fetching posts');
         }
     };
 
@@ -49,6 +57,10 @@ const Home = ({ setIsAuthenticated }) => {
                     },
                 }
             );
+            if (response.data.post.error) {
+                setError(response.data.post.error);
+                return;
+            }
             fetchPosts();
         } catch (error) {
             console.error("Error liking post: ", error);
@@ -58,7 +70,7 @@ const Home = ({ setIsAuthenticated }) => {
     const handleDeletePost = async (postId, setPosts) => {
         try {
             const token = localStorage.getItem("token");
-            await axios.delete("http://localhost:4000/post", {
+            const response = await axios.delete("http://localhost:4000/post", {
                 headers: {
                     Authorization: `${token}`,
                 },
@@ -66,6 +78,10 @@ const Home = ({ setIsAuthenticated }) => {
                     id: postId,
                 },
             });
+            if (response.data.posts.error) {
+                setError(response.data.posts.error);
+                return;
+            }
             fetchPosts();
         } catch (error) {
             console.error("Error deleting post: ", error);
@@ -102,6 +118,10 @@ const Home = ({ setIsAuthenticated }) => {
                     Authorization: `${token}`,
                 },
             });
+            if (response.data.posts.error) {
+                setError(response.data.posts.error);
+                return;
+            }
             setPosts(response.data.posts);
             setFavoritePosts(response.data.posts);
         } catch (error) {
@@ -113,6 +133,7 @@ const Home = ({ setIsAuthenticated }) => {
         <div>
             <NavBar setIsAuthenticated={setIsAuthenticated} />
             <h2>Recent Posts</h2>
+            {error && <p className="error">{error}</p>}
             <div>
                 <input
                     type="text"

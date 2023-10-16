@@ -73,19 +73,19 @@ const updatePassword = async (data) => {
     try {
         if (!data.id) {
             console.log('No user ID provided');
-            return null;
+            return { error: 'No user provided' };
         }
 
         const user = await User.findById(data.id);
 
         if (!user) {
             console.log('User not found');
-            return null;
+            return { error: 'User not found' };
         }
 
         if (!data.oldPassword) {
             console.log('Old password not provided');
-            return null;
+            return { error: 'Old password not provided' };
         }
 
         // Check if the old password is correct
@@ -93,7 +93,7 @@ const updatePassword = async (data) => {
 
         if (!isPasswordValid) {
             console.log('Old password is incorrect');
-            return null;
+            return { error: 'Old password is incorrect' };
         }
 
         if (data.newPassword) {
@@ -108,7 +108,7 @@ const updatePassword = async (data) => {
         return user;
     } catch (error) {
         console.log(error);
-        return null;
+        return { error };
     }
 }
 
