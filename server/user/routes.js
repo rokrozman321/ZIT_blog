@@ -43,7 +43,7 @@ app.post('/login', async (req, res) => {
 
         const token = await loginUser(data);
 
-        if (token) res.status(201).json({ token: token });
+        if (token) res.status(201).json({ token });
         else res.status(500).json({ error: 'Internal server error' })
 
     } catch (error) {

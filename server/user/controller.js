@@ -20,7 +20,6 @@ const createNewUser = async (data) => {
         const existingUser = await User.findOne({ username: data.username });
         if (existingUser) {
             return { error: 'Username is already taken' };
-            // return null;
         }
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(data.password, saltRounds);
@@ -32,20 +31,17 @@ const createNewUser = async (data) => {
 
         // create token
         const token = await createToken(newUser);
-        // const token = 'fake token'
 
         return token
     } catch (error) {
         console.log(error);
-        // return null;
         return { error: 'Internal server error' };
     }
 }
 const loginUser = async (data) => {
     try {
         if (!data.username || !data.password) {
-            console.log('Did not got username or password');
-            return null
+            return { error: 'Missing username or password' };
         }
 
         const user = await User.findOne({
@@ -53,26 +49,23 @@ const loginUser = async (data) => {
         });
 
         if (!user) {
-            console.log('user does not exists');
-            return null
+            return { error: 'User does not exist' };
         }
 
         const passwordMatch = await bcrypt.compare(data.password, user.password);
 
         if (!passwordMatch) {
-            return null
+            return { error: 'Wrong password' };
         }
 
         // create token
         const token = await createToken(user);
-        // const token = 'Fake token from login'
-        // const id = await verifyToken(token);
 
         return token;
 
     } catch (error) {
         console.log(error);
-        return null;
+        return { error: 'Error logging in user' };
     }
 }
 
