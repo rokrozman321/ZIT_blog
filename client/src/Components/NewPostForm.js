@@ -33,13 +33,14 @@ const NewPostForm = ({ setPosts }) => {
             setBody('');
         } catch (error) {
             console.error('Error creating post: ', error);
+            setError('Error creating new post');
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
             <div>
-            {error && <p className="error">{error}</p>}
+                {error && <p className="error">{error}</p>}
                 <label>Title</label>
                 <input
                     type="text"

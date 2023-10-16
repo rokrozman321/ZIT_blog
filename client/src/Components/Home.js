@@ -42,7 +42,7 @@ const Home = ({ setIsAuthenticated }) => {
             setAllPosts(response.data.posts);
         } catch (error) {
             console.error("Error fetching posts: ", error);
-                setError('Error fetching posts');
+            setError('Error fetching posts');
         }
     };
 
@@ -64,6 +64,7 @@ const Home = ({ setIsAuthenticated }) => {
             fetchPosts();
         } catch (error) {
             console.error("Error liking post: ", error);
+            setError('Error liking post');
         }
     };
 
@@ -85,6 +86,7 @@ const Home = ({ setIsAuthenticated }) => {
             fetchPosts();
         } catch (error) {
             console.error("Error deleting post: ", error);
+            setError('Error deleting post');
         }
     };
 
@@ -126,6 +128,7 @@ const Home = ({ setIsAuthenticated }) => {
             setFavoritePosts(response.data.posts);
         } catch (error) {
             console.error("Error deleting post: ", error);
+            setError('Error fetching favorite posts');
         }
     };
 

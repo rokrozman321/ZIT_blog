@@ -30,6 +30,7 @@ const NewCommentForm = ({ postId, setComments }) => {
             setComments((comments) => [...comments, response.data.comment]);
         } catch (error) {
             console.error('Error creating comment: ', error);
+            setError('Error creating new comment');
         }
     };
 

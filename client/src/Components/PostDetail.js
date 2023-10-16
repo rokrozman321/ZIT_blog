@@ -29,12 +29,12 @@ const PostDetail = () => {
                 setError(response.data.post.error);
                 return;
             }
-            
+
             setPost(response.data.post);
             setComments(response.data.post.comments)
         } catch (error) {
             console.error('Error fetching post: ', error);
-                setError('Error fetching post');
+            setError('Error fetching post');
         }
     };
 
@@ -49,7 +49,7 @@ const PostDetail = () => {
                     },
                 }
             );
-            
+
             if (response.data.comment.error) {
                 setError(response.data.comment.error);
                 return;
@@ -57,6 +57,7 @@ const PostDetail = () => {
             fetchPost();
         } catch (error) {
             console.error('Error liking post: ', error);
+            setError('Error liking post');
         }
     };
 
@@ -79,6 +80,7 @@ const PostDetail = () => {
             setIsEditing(false);
         } catch (error) {
             console.error('Error editing post: ', error);
+            setError('Error editing post');
         }
     };
 
@@ -97,6 +99,7 @@ const PostDetail = () => {
             fetchPost(); // Refresh the post data after deleting a comment
         } catch (error) {
             console.error('Error deleting comment: ', error);
+            setError('Error deleting comment');
         }
     };
 
@@ -105,7 +108,7 @@ const PostDetail = () => {
             <NavBar />
             {post ? (
                 <div>
-            {error && <p className="error">{error}</p>}
+                    {error && <p className="error">{error}</p>}
                     <h2>{post.title}</h2>
                     <p>{post.body}</p>
                     <p>Author: {post.author.username}</p>
