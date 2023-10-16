@@ -21,7 +21,9 @@ app.use('/post', postRouter);
 app.use('/comment', commentRouter);
 
 const atlas_geslo = process.env.ATLAS_GESLO
-const url = "mongodb+srv://Rok:" + atlas_geslo + "@cluster0.vc1wigh.mongodb.net/Blog";
+const mongodb_url = process.env.MONGODB_URL
+const url = mongodb_url;
+//const url = "mongodb+srv://Rok:" + atlas_geslo + "@cluster0.vc1wigh.mongodb.net/Blog";
 
 mongoose.connect(url, {
     useNewUrlParser: true,
