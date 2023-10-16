@@ -49,7 +49,7 @@ const loginUser = async (data) => {
         });
 
         if (!user) {
-            return { error: 'User does not exist' };
+            return { error: 'User not found' };
         }
 
         const passwordMatch = await bcrypt.compare(data.password, user.password);

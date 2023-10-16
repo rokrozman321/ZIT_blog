@@ -67,7 +67,7 @@ const deleteComment = async (data) => {
 
         if (comment.author.toString() !== data.userId) {
             console.log('Not the author of the comment');
-            return { error: 'You are not the author of the comment' };
+            return { error: 'You are not author of the comment' };
         }
 
         await Comment.deleteOne({ _id: data.commentId });
@@ -83,12 +83,12 @@ const likeComment = async (data) => {
     try {
         const comment = await Comment.findById(data.id);
         if (!comment) {
-        return { error: 'Comment not found' };
+            return { error: 'Comment not found' };
         }
 
         const user = await User.findById(data.userId);
         if (!user) {
-        return { error: 'User not found' };
+            return { error: 'User not found' };
         }
 
         const likedIndex = user.fav_comments.indexOf(comment._id);

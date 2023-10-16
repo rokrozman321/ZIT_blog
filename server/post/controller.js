@@ -35,7 +35,6 @@ const getPost = async (data) => {
 
         const user = await User.findById(data.userId);
         if (!user) {
-
             return { error: 'User not found' };
         }
         const post = await Post.findById(data.postId).populate({
@@ -50,16 +49,16 @@ const getPost = async (data) => {
         return post;
     } catch (error) {
         console.log(error);
-            return { error: 'Error getting post info' };
+        return { error: 'Error getting post info' };
     }
 }
 
 const createPost = async (data) => {
     try {
         const user = await User.findById(data.id);
-        if (!user){
+        if (!user) {
             return { error: 'User not found' };
-        } 
+        }
         const author = user.id;
         const title = data.title;
         const body = data.body;
@@ -81,7 +80,7 @@ const createPost = async (data) => {
         return populatedNewPost;
     } catch (error) {
         console.log(error);
-            return { error: 'Error creating new post' };
+        return { error: 'Error creating new post' };
     }
 }
 
@@ -92,7 +91,7 @@ const editPost = async (data) => {
             return { error: 'Post not provided' };
         }
         if (post.author != data.authorId) {
-            return { error: 'You are not author of post' };
+            return { error: 'You are not author of the post' };
         }
         if (data.title) post.title = data.title;
         if (data.body) post.body = data.body;
@@ -100,7 +99,7 @@ const editPost = async (data) => {
         return post;
     } catch (error) {
         console.log(error);
-            return { error: 'Error editing post' };
+        return { error: 'Error editing post' };
     }
 }
 
@@ -122,7 +121,7 @@ const deletePost = async (data) => {
         return posts;
     } catch (error) {
         console.log(error);
-            return { error: 'Error deleting post' };
+        return { error: 'Error deleting post' };
     }
 }
 
@@ -154,7 +153,7 @@ const likePost = async (data) => {
         return post;
     } catch (error) {
         console.log(error);
-            return { error: 'Error liking post' };
+        return { error: 'Error liking post' };
     }
 }
 
@@ -177,7 +176,7 @@ const getFavoritePosts = async (data) => {
         return favoritePosts;
     } catch (error) {
         console.log(error);
-            return { error: 'Error getting favorite posts' };
+        return { error: 'Error getting favorite posts' };
     }
 }
 
